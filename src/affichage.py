@@ -241,9 +241,9 @@ def _tableau(offres: list[dict], aujourdhui: date, avec_pays: bool) -> list[str]
 # Photo de Naboth Otieno sur Pexels (licence Pexels : utilisation gratuite).
 # Pour changer de photo : remplacer l'identifiant dans l'adresse, ou mettre une image
 # dans assets/ et indiquer ici son chemin (par exemple "assets/banniere.jpg").
-PHOTO = "https://images.pexels.com/photos/19805876/pexels-photo-19805876.jpeg?auto=compress&cs=tinysrgb&w=1280&h=420&fit=crop"
-PHOTO_PAGE = "https://www.pexels.com/photo/man-working-on-computer-in-an-office-19805876/"
-PHOTO_AUTEUR = "Naboth Otieno"
+PHOTO = "assets/banniere.jpg"
+PHOTO_PAGE = ""
+PHOTO_AUTEUR = ""
 
 
 def generer(ouvertes: list[dict], aujourdhui: date, stats: list[dict] | None = None) -> str:
