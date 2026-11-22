@@ -234,4 +234,25 @@ def test_affichage_lieu_non_precise_en_dernier():
     ]
     texte = affichage.generer(offres, date(2026, 11, 22))
     assert texte.index("Kenya") < texte.index("Lieu non précisé")
-    assert "· 1 pays ·" in texte
+    assert "**1 pays**" in texte
+
+
+# -------------------------------------------------------------- Graphiques
+
+def test_graphiques_mermaid():
+    offres = un_careers.analyser((FIXTURES / "un_jobfeed.xml").read_text(encoding="utf-8"))
+    stats = [
+        {"date": "2026-11-21", "offres_ouvertes": "2", "nouvelles_offres": "2"},
+        {"date": "2026-11-22", "offres_ouvertes": "3", "nouvelles_offres": "1"},
+    ]
+    texte = affichage.generer(offres, date(2026, 11, 22), stats)
+    assert texte.count("```mermaid") == 3
+    assert '"Côte d\'Ivoire"' in texte
+    assert 'x-axis ["21/11", "22/11"]' in texte
+    assert "line [2, 3]" in texte
+
+
+def test_pas_de_courbe_avec_un_seul_jour():
+    offres = un_careers.analyser((FIXTURES / "un_jobfeed.xml").read_text(encoding="utf-8"))
+    texte = affichage.generer(offres, date(2026, 11, 22), [{"date": "2026-11-22", "offres_ouvertes": "3", "nouvelles_offres": "3"}])
+    assert texte.count("```mermaid") == 2

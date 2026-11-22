@@ -1,64 +1,38 @@
-# Offres tech en Afrique dans les organisations internationales
+<a name="haut"></a>
 
-Collecte automatique, chaque matin, des offres d'emploi dans les métiers de la tech (ICT, data, développement, GIS, systèmes d'information, statistiques) publiées en Afrique par les organisations internationales et panafricaines.
+# 💼 Offres d'emploi tech en Afrique
 
-## Sources
+**Les postes en informatique, data, développement, systèmes d'information, GIS et statistiques publiés en Afrique par l'ONU, l'UNESCO, l'Union africaine et la Banque africaine de développement.**
 
-| Organisation | Source | Accès |
-|---|---|---|
-| ONU (Secrétariat : CEA, PNUE, ONU-Habitat, OCHA, missions de paix...) | [careers.un.org](https://careers.un.org) | Flux RSS public |
-| UNESCO | [careers.unesco.org](https://careers.unesco.org) | Sitemap public et fiches des offres |
-| Union africaine | [jobs.au.int](https://jobs.au.int) | Sitemap public et fiches des offres |
-| Banque africaine de développement | [afdb.org](https://www.afdb.org/en/about-careers/current-vacancies) | Pages des postes et des consultances |
+Cette page est mise à jour automatiquement chaque matin. Cliquez sur le titre d'une offre pour lire la fiche complète et postuler sur le site officiel de l'organisation.
 
-Chaque source est indépendante : si l'une est en panne, les autres continuent d'alimenter le dépôt. La collecte respecte le robots.txt de chaque site et marque une pause entre les requêtes.
+> **0 offre ouverte** dans **0 pays** · **0 nouvelle offre** aujourd'hui · mise à jour le 22 novembre 2026
 
-Organisations non couvertes : le HCR (son site refuse les requêtes venant de GitHub Actions), l'UNICEF (son robots.txt exclut la recherche automatisée), l'OMS (ses flux RSS n'indiquent pas le lieu du poste).
+Aucune offre ouverte pour le moment. Revenez demain.
 
-## Fonctionnement
+## ℹ️ Bon à savoir
 
-1. Chaque jour, un GitHub Action lance `src/collect.py`.
-2. Le script garde les offres situées dans un pays africain (d'après le lieu d'affectation) et dont le titre ou la famille de métier relève de la tech.
-3. Il ajoute les nouvelles offres à l'historique, met à jour les statistiques du jour et la liste ci-dessous.
-4. Il commite le résultat avec un message qui résume la journée.
+**Comment lire le niveau d'un poste**
 
-## Structure
+- **Stage** : stage, généralement pour étudiants ou jeunes diplômés.
+- **Consultant** : contrat de courte durée, pour une mission précise.
+- **Professionnel (P-1 à P-5, PL à la BAD)** : poste de cadre, avec recrutement international.
+- **Administrateur national (NO)** : poste de cadre réservé aux ressortissants du pays où se trouve le poste.
+- **Services généraux (G, GS)** : poste d'appui, recruté sur place.
 
-```
-src/
-├── collect.py          # orchestration : collecte, fusion, statistiques, README
-├── filtres.py          # pays et villes africaines, mots-clés tech
-└── sources/
-    ├── un_careers.py      # flux RSS de l'ONU
-    ├── successfactors.py  # UNESCO et Union africaine
-    ├── afdb.py            # Banque africaine de développement
-    ├── tableaux_html.py   # lecture des tableaux d'offres en HTML
-    └── workday.py         # sites carrières Workday (désactivé)
-data/
-├── offres.csv              # historique de toutes les offres vues
-└── stats_journalieres.csv  # une ligne par jour
-```
+**Pour postuler**
 
-## Lancer en local
+- La candidature se fait toujours sur le site officiel de l'organisation, en suivant le lien de l'offre.
+- Les organisations internationales ne demandent jamais de frais pour postuler. Méfiez-vous de toute demande de paiement.
+- Vérifiez la date de clôture et les conditions (nationalité, langues, expérience) sur la fiche de l'offre.
 
-```bash
-pip install -r requirements.txt
-python src/collect.py
-```
+**Organisations suivies**
 
-Tests :
+- [ONU](https://careers.un.org) : Secrétariat de l'ONU : CEA, PNUE, ONU-Habitat, OCHA, missions de paix...
+- [UNESCO](https://careers.unesco.org) : Organisation des Nations unies pour l'éducation, la science et la culture
+- [UA](https://jobs.au.int) : Union africaine
+- [BAD](https://www.afdb.org/en/about-careers/current-vacancies) : Banque africaine de développement
 
-```bash
-pip install pytest
-pytest
-```
+---
 
-## Offres ouvertes
-
-<!-- OFFRES:DEBUT -->
-_La liste apparaîtra après la première collecte._
-<!-- OFFRES:FIN -->
-
-## Données
-
-Les offres appartiennent aux organisations qui les publient. Ce dépôt ne garde que les métadonnées (titre, organisation, lieu, niveau, dates, lien) et renvoie vers le site d'origine pour le détail et la candidature.
+Les offres appartiennent aux organisations qui les publient. Cette page reprend uniquement le titre, le lieu, le niveau et les dates, avec un lien vers l'annonce officielle. Fonctionnement du projet : [TECHNIQUE.md](TECHNIQUE.md).

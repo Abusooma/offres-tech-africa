@@ -37,8 +37,6 @@ COLONNES = [
     "niveau", "date_publication", "date_cloture", "url", "source", "vue_le", "derniere_vue",
 ]
 
-DEBUT_TABLE = "<!-- OFFRES:DEBUT -->"
-FIN_TABLE = "<!-- OFFRES:FIN -->"
 
 
 # ------------------------------------------------------------ Fichiers
@@ -94,11 +92,8 @@ def ligne_stats(jour: str, ouvertes: list[dict], nouvelles: list[dict]) -> dict:
 
 # -------------------------------------------------------------- Sorties
 
-def mettre_a_jour_readme(table: str) -> None:
-    texte = FICHIER_README.read_text(encoding="utf-8")
-    debut = texte.index(DEBUT_TABLE) + len(DEBUT_TABLE)
-    fin = texte.index(FIN_TABLE)
-    FICHIER_README.write_text(texte[:debut] + "\n" + table + "\n" + texte[fin:], encoding="utf-8")
+def ecrire_readme(contenu: str) -> None:
+    FICHIER_README.write_text(contenu, encoding="utf-8")
 
 
 def message_commit(jour: str, nouvelles: list[dict], ouvertes: list[dict]) -> str:
@@ -142,7 +137,7 @@ def main() -> int:
     stats = [s for s in lire_csv(FICHIER_STATS) if s["date"] != jour] + [ligne_stats(jour, ouvertes, nouvelles)]
     ecrire_csv(FICHIER_STATS, sorted(stats, key=lambda s: s["date"]), list(stats[-1].keys()))
 
-    mettre_a_jour_readme(affichage.generer(ouvertes, aujourdhui))
+    ecrire_readme(affichage.generer(ouvertes, aujourdhui, stats))
 
     message = message_commit(jour, nouvelles, ouvertes)
     FICHIER_MESSAGE.write_text(message, encoding="utf-8")
