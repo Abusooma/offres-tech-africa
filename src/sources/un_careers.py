@@ -22,6 +22,11 @@ SIGLES = {
     "Department of Peace Operations": "DPO",
     "Office of the High Commissioner for Human Rights": "HCDH",
     "United Nations Office on Drugs and Crime": "ONUDC",
+    "Office of Internal Oversight Services": "BSCI",
+    "United Nations Development Programme": "PNUD",
+    "United Nations Children's Fund": "UNICEF",
+    "Department of Safety and Security": "DSS",
+    "Office of Legal Affairs": "OLA",
 }
 
 

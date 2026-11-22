@@ -22,38 +22,53 @@ SITES = [
     },
 ]
 
-RECHERCHES = ["ICT", "data", "information management", "developer", "software", "digital", "GIS", "network"]
 TAILLE_PAGE = 20          # maximum accepté par Workday
-PAUSE = 1.0               # secondes entre deux requêtes, pour rester discret
+PAUSE = 3.0               # secondes entre deux requêtes
+ESSAIS = 3                # tentatives si le site répond 429 (trop de requêtes)
+ATTENTE_429 = 60          # secondes d'attente par défaut après un 429
+
+
+class TropDeRequetes(Exception):
+    pass
+
+
+def _requete(session, methode: str, url: str, **kwargs) -> dict:
+    """Envoie la requête, attend et réessaie si le site demande de ralentir."""
+    for essai in range(1, ESSAIS + 1):
+        reponse = session.request(methode, url, headers={"Accept": "application/json"}, timeout=60, **kwargs)
+        if reponse.status_code != 429:
+            reponse.raise_for_status()
+            time.sleep(PAUSE)
+            return reponse.json()
+        if essai == ESSAIS:
+            raise TropDeRequetes(f"429 persistant après {ESSAIS} essais sur {url}")
+        attente = int(reponse.headers.get("Retry-After", ATTENTE_429 * essai))
+        print(f"  429 reçu, nouvel essai dans {attente} s")
+        time.sleep(attente)
+    return {}
 
 
 def _base(site: dict) -> str:
     return f"https://{site['hote']}/wday/cxs/{site['tenant']}/{site['site']}"
 
 
-def _chercher(session, site: dict, texte: str) -> list[dict]:
+def _lister(session, site: dict) -> list[dict]:
+    """Parcourt toutes les offres du site, sans recherche, page par page."""
     resultats, offset = [], 0
     while True:
-        reponse = session.post(
-            f"{_base(site)}/jobs",
-            json={"appliedFacets": {}, "limit": TAILLE_PAGE, "offset": offset, "searchText": texte},
-            timeout=60,
+        contenu = _requete(
+            session, "POST", f"{_base(site)}/jobs",
+            json={"appliedFacets": {}, "limit": TAILLE_PAGE, "offset": offset, "searchText": ""},
         )
-        reponse.raise_for_status()
-        contenu = reponse.json()
         page = contenu.get("jobPostings", [])
         resultats.extend(page)
         offset += len(page)
-        time.sleep(PAUSE)
         if not page or offset >= contenu.get("total", 0):
             return resultats
 
 
 def _detail(session, site: dict, chemin: str) -> dict:
-    reponse = session.get(f"{_base(site)}{chemin}", timeout=60)
-    reponse.raise_for_status()
-    time.sleep(PAUSE)
-    return reponse.json().get("jobPostingInfo", {})
+    return _requete(session, "GET", f"{_base(site)}{chemin}").get("jobPostingInfo", {})
 
 
 def analyser_detail(site: dict, chemin: str, info: dict) -> dict | None:
@@ -81,13 +96,14 @@ def analyser_detail(site: dict, chemin: str, info: dict) -> dict | None:
 def collecter(session) -> list[dict]:
     offres = []
     for site in SITES:
-        chemins = set()
-        for texte in RECHERCHES:
-            for annonce in _chercher(session, site, texte):
-                # Premier tri sur le titre pour ne pas ouvrir chaque fiche inutilement.
-                if annonce.get("externalPath") and filtres.est_tech(annonce.get("title", "")):
-                    chemins.add(annonce["externalPath"])
-        for chemin in sorted(chemins):
+        annonces = _lister(session, site)
+        # Tri sur le titre d'abord : on n'ouvre que les fiches qui ressemblent à de la tech.
+        chemins = sorted({
+            a["externalPath"] for a in annonces
+            if a.get("externalPath") and filtres.est_tech(a.get("title", ""))
+        })
+        print(f"  {site['sigle']} : {len(annonces)} offres au total, {len(chemins)} à vérifier")
+        for chemin in chemins:
             offre = analyser_detail(site, chemin, _detail(session, site, chemin))
             if offre:
                 offres.append(offre)

@@ -92,3 +92,68 @@ def test_message_commit():
         "data: 3 nouvelles offres tech le 2026-11-21"
     )
     assert "aucune nouvelle offre" in collect.message_commit("2026-11-21", [], offres)
+
+
+# --------------------------------------------------------------- Affichage
+
+import affichage  # noqa: E402
+
+
+def test_date_fr():
+    assert affichage.date_fr("2026-11-30") == "30 novembre 2026"
+    assert affichage.date_fr("2026-08-01") == "1er août 2026"
+
+
+def test_delai():
+    jour = date(2026, 11, 22)
+    assert affichage.delai("2026-11-22", jour) == "dernier jour"
+    assert affichage.delai("2026-11-23", jour) == "demain"
+    assert affichage.delai("2026-11-30", jour) == "dans 8 jours"
+
+
+def test_niveau_lisible():
+    assert affichage.niveau_lisible("CON") == "Consultant"
+    assert affichage.niveau_lisible("I-1") == "Stage"
+    assert affichage.niveau_lisible("P-4") == "Professionnel (P-4)"
+
+
+def test_affichage_groupe_par_pays():
+    offres = un_careers.analyser((FIXTURES / "un_jobfeed.xml").read_text(encoding="utf-8"))
+    texte = affichage.generer(offres, date(2026, 11, 22))
+    assert "### 🇰🇪 Kenya (1)" in texte
+    assert "17 décembre 2026 (dans 25 jours)" in texte
+
+
+# ------------------------------------------------- Workday : gestion du 429
+
+class _Reponse:
+    def __init__(self, code, contenu=None):
+        self.status_code, self._contenu, self.headers = code, contenu or {}, {"Retry-After": "0"}
+
+    def raise_for_status(self):
+        pass
+
+    def json(self):
+        return self._contenu
+
+
+class _Session:
+    def __init__(self, reponses):
+        self.reponses = list(reponses)
+
+    def request(self, *args, **kwargs):
+        return self.reponses.pop(0)
+
+
+def test_workday_reessaie_apres_429(monkeypatch):
+    monkeypatch.setattr(workday, "PAUSE", 0)
+    session = _Session([_Reponse(429), _Reponse(200, {"total": 1, "jobPostings": [{"title": "x"}]})])
+    assert workday._requete(session, "POST", "https://exemple")["total"] == 1
+
+
+def test_workday_abandonne_apres_trois_429(monkeypatch):
+    import pytest
+    monkeypatch.setattr(workday, "PAUSE", 0)
+    session = _Session([_Reponse(429)] * 3)
+    with pytest.raises(workday.TropDeRequetes):
+        workday._requete(session, "POST", "https://exemple")

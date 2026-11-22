@@ -15,6 +15,7 @@ from pathlib import Path
 import requests
 
 sys.path.insert(0, str(Path(__file__).parent))
+import affichage  # noqa: E402
 from sources import USER_AGENT, un_careers, workday  # noqa: E402
 
 SOURCES = {
@@ -90,25 +91,6 @@ def ligne_stats(jour: str, ouvertes: list[dict], nouvelles: list[dict]) -> dict:
 
 # -------------------------------------------------------------- Sorties
 
-def generer_table(ouvertes: list[dict], jour: str) -> str:
-    lignes = [
-        f"_Mis à jour le {jour} : {len(ouvertes)} offres ouvertes, "
-        f"{len({o['organisation'] for o in ouvertes})} organisations, "
-        f"{len({o['pays'] for o in ouvertes})} pays._",
-        "",
-        "| Poste | Organisation | Lieu | Niveau | Clôture |",
-        "|---|---|---|---|---|",
-    ]
-    for o in sorted(ouvertes, key=lambda o: o["date_cloture"] or "9999-12-31"):
-        titre = o["titre"].replace("|", "/")
-        lieu = f"{o['ville']}, {o['pays']}" if o["ville"] else o["pays"]
-        lignes.append(
-            f"| [{titre}]({o['url']}) | {o['organisation']} | {lieu} | {o['niveau']} | "
-            f"{o['date_cloture'] or 'non précisée'} |"
-        )
-    return "\n".join(lignes)
-
-
 def mettre_a_jour_readme(table: str) -> None:
     texte = FICHIER_README.read_text(encoding="utf-8")
     debut = texte.index(DEBUT_TABLE) + len(DEBUT_TABLE)
@@ -157,7 +139,7 @@ def main() -> int:
     stats = [s for s in lire_csv(FICHIER_STATS) if s["date"] != jour] + [ligne_stats(jour, ouvertes, nouvelles)]
     ecrire_csv(FICHIER_STATS, sorted(stats, key=lambda s: s["date"]), list(stats[-1].keys()))
 
-    mettre_a_jour_readme(generer_table(ouvertes, jour))
+    mettre_a_jour_readme(affichage.generer(ouvertes, aujourdhui))
 
     message = message_commit(jour, nouvelles, ouvertes)
     FICHIER_MESSAGE.write_text(message, encoding="utf-8")
