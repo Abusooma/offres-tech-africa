@@ -49,7 +49,17 @@ pytest
 ## Offres ouvertes
 
 <!-- OFFRES:DEBUT -->
-_La liste apparaîtra après la première collecte._
+_Mis à jour le 2026-11-22 : 7 offres ouvertes, 5 organisations, 3 pays._
+
+| Poste | Organisation | Lieu | Niveau | Clôture |
+|---|---|---|---|---|
+| [ACS/Data Innovation and Analytics](https://careers.un.org/jobSearchDescription/287673?language=en) | CEA | Addis Ababa, Éthiopie | CON | 2026-11-23 |
+| [Programme Officer (Migrant Smuggling and Cybercrime Investigation) - temporary](https://careers.un.org/jobSearchDescription/287979?language=en) | ONUDC | Rabat, Maroc | P-3 | 2026-11-23 |
+| [Intern - Data analytics](https://careers.un.org/jobSearchDescription/287931?language=en) | ONU-Habitat | Nairobi, Kenya | I-1 | 2026-11-25 |
+| [Information Systems  Intern](https://careers.un.org/jobSearchDescription/288738?language=en) | PNUE | Nairobi, Kenya | I-1 | 2026-11-28 |
+| [Senior Consultant: Scientific Assessment and Expert Group Coordination on the Environmental Sustainability of Artificial Intelligence](https://careers.un.org/jobSearchDescription/288720?language=en) | PNUE | Nairobi, Kenya | CON | 2026-11-30 |
+| [Software Application Developer](https://careers.un.org/jobSearchDescription/288576?language=en) | PNUE | Nairobi, Kenya | CON | 2026-11-30 |
+| [DIGITAL FORENSIC INVESTIGATOR](https://careers.un.org/jobSearchDescription/282126?language=en) | Office of Internal Oversight Services | Nairobi, Kenya | P-4 | 2026-12-12 |
 <!-- OFFRES:FIN -->
 
 ## Données
