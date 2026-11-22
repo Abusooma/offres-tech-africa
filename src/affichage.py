@@ -238,9 +238,6 @@ def _tableau(offres: list[dict], aujourdhui: date, avec_pays: bool) -> list[str]
 
 # ------------------------------------------------------------------- Page
 
-# Photo de Naboth Otieno sur Pexels (licence Pexels : utilisation gratuite).
-# Pour changer de photo : remplacer l'identifiant dans l'adresse, ou mettre une image
-# dans assets/ et indiquer ici son chemin (par exemple "assets/banniere.jpg").
 PHOTO = "assets/banniere.png"
 PHOTO_PAGE = ""
 PHOTO_AUTEUR = ""
