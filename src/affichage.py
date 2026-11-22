@@ -241,7 +241,7 @@ def _tableau(offres: list[dict], aujourdhui: date, avec_pays: bool) -> list[str]
 # Photo de Naboth Otieno sur Pexels (licence Pexels : utilisation gratuite).
 # Pour changer de photo : remplacer l'identifiant dans l'adresse, ou mettre une image
 # dans assets/ et indiquer ici son chemin (par exemple "assets/banniere.jpg").
-PHOTO = "assets/banniere.jpg"
+PHOTO = "assets/banniere.png"
 PHOTO_PAGE = ""
 PHOTO_AUTEUR = ""
 
@@ -263,8 +263,11 @@ def generer(ouvertes: list[dict], aujourdhui: date, stats: list[dict] | None = N
         "",
         f'<img src="{escape(PHOTO)}" width="100%" alt="Développeur au travail dans un bureau à Nairobi">',
         "",
-        f'<p align="right"><sub>Photo : <a href="{PHOTO_PAGE}">{PHOTO_AUTEUR}, Pexels</a></sub></p>',
-        "",
+        *(
+            [f'<p align="right"><sub>Photo : <a href="{PHOTO_PAGE}">{PHOTO_AUTEUR}, Pexels</a></sub></p>', ""]
+            if PHOTO_AUTEUR
+            else []
+        ),
         "# Offres d'emploi tech en Afrique",
         "",
         "Les postes en informatique, data, développement, GIS et statistiques publiés en Afrique "

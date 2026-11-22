@@ -1,8 +1,6 @@
 <a name="haut"></a>
 
-<img src="https://images.pexels.com/photos/19805876/pexels-photo-19805876.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1280&amp;h=420&amp;fit=crop" width="100%" alt="Développeur au travail dans un bureau à Nairobi">
-
-<p align="right"><sub>Photo : <a href="https://www.pexels.com/photo/man-working-on-computer-in-an-office-19805876/">Naboth Otieno, Pexels</a></sub></p>
+<img src="assets/banniere.png" width="100%" alt="Développeur au travail dans un bureau à Nairobi">
 
 # Offres d'emploi tech en Afrique
 
