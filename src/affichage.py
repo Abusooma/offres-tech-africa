@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import re
 import unicodedata
+from html import escape
 from collections import Counter, defaultdict
 from datetime import date
 
@@ -45,6 +46,16 @@ def date_fr(iso: str) -> str:
         return ""
     annee, mois, jour = (int(x) for x in iso.split("-"))
     return f"{'1er' if jour == 1 else jour} {MOIS[mois - 1]} {annee}"
+
+
+MOIS_COURTS = ["janv.", "févr.", "mars", "avr.", "mai", "juin",
+               "juil.", "août", "sept.", "oct.", "nov.", "déc."]
+
+
+def date_courte(iso: str) -> str:
+    """'2026-11-30' -> '30 nov. 2026'."""
+    annee, mois, jour = (int(x) for x in iso.split("-"))
+    return f"{'1er' if jour == 1 else jour} {MOIS_COURTS[mois - 1]} {annee}"
 
 
 def delai(iso: str, aujourdhui: date) -> str:
@@ -187,8 +198,6 @@ def _pluriel(n: int, texte: str) -> str:
 
 
 def _lieu(o: dict) -> str:
-    if o["ville"] and o["pays"]:
-        return f"{o['ville']}, {o['pays']}"
     return o["ville"] or o["pays"] or "Non précisé"
 
 
@@ -196,24 +205,45 @@ def _ferme_bientot(o: dict, aujourdhui: date) -> bool:
     return bool(o["date_cloture"]) and (date.fromisoformat(o["date_cloture"]) - aujourdhui).days <= JOURS_URGENTS
 
 
-def _bloc_offre(o: dict, aujourdhui: date) -> list[str]:
-    nouveau = " 🆕" if o.get("vue_le") == aujourdhui.isoformat() else ""
-    details = " · ".join(x for x in [o["organisation"], o["ville"], niveau_lisible(o["niveau"])] if x)
-    return [
-        f"- **[{o['titre']}]({o['url']})**{nouveau}  ",
-        f"  {details}  ",
-        f"  {_ligne_cloture(o, aujourdhui)}",
-        "",
-    ]
+def _cloture(o: dict, aujourdhui: date) -> str:
+    if not o["date_cloture"]:
+        return "Non précisée"
+    texte = f"{date_courte(o['date_cloture'])}, {delai(o['date_cloture'], aujourdhui)}"
+    if (date.fromisoformat(o["date_cloture"]) - aujourdhui).days <= 2:
+        return f"**{texte}**"
+    return texte
 
 
-def _tableau(offres: list[dict], aujourdhui: date) -> list[str]:
-    lignes = ["| Poste | Organisation | Lieu | Clôture |", "|---|---|---|---|"]
-    for o in offres:
-        titre = o["titre"].replace("|", "/")
-        cloture = f"{date_fr(o['date_cloture'])} ({delai(o['date_cloture'], aujourdhui)})" if o["date_cloture"] else "non précisée"
-        lignes.append(f"| [{titre}]({o['url']}) | {o['organisation']} | {_lieu(o)} | {cloture} |")
+def _poste(o: dict, aujourdhui: date) -> str:
+    titre = o["titre"].replace("|", "/")
+    nouveau = " *(nouveau)*" if o.get("vue_le") == aujourdhui.isoformat() else ""
+    return f"[{titre}]({o['url']}){nouveau}"
+
+
+def _tableau(offres: list[dict], aujourdhui: date, avec_pays: bool) -> list[str]:
+    if avec_pays:
+        lignes = ["| Poste | Organisation | Lieu | Clôture |", "|---|---|---|---|"]
+        for o in offres:
+            lieu = ", ".join(x for x in [o["ville"], o["pays"]] if x) or "Non précisé"
+            lignes.append(f"| {_poste(o, aujourdhui)} | {o['organisation']} | {lieu} | {_cloture(o, aujourdhui)} |")
+    else:
+        lignes = ["| Poste | Organisation | Ville | Niveau | Clôture |", "|---|---|---|---|---|"]
+        for o in offres:
+            lignes.append(
+                f"| {_poste(o, aujourdhui)} | {o['organisation']} | {o['ville'] or '-'} | "
+                f"{niveau_lisible(o['niveau']) or '-'} | {_cloture(o, aujourdhui)} |"
+            )
     return lignes
+
+
+# ------------------------------------------------------------------- Page
+
+# Photo de Naboth Otieno sur Pexels (licence Pexels : utilisation gratuite).
+# Pour changer de photo : remplacer l'identifiant dans l'adresse, ou mettre une image
+# dans assets/ et indiquer ici son chemin (par exemple "assets/banniere.jpg").
+PHOTO = "https://images.pexels.com/photos/19805876/pexels-photo-19805876.jpeg?auto=compress&cs=tinysrgb&w=1280&h=420&fit=crop"
+PHOTO_PAGE = "https://www.pexels.com/photo/man-working-on-computer-in-an-office-19805876/"
+PHOTO_AUTEUR = "Naboth Otieno"
 
 
 def generer(ouvertes: list[dict], aujourdhui: date, stats: list[dict] | None = None) -> str:
@@ -226,74 +256,82 @@ def generer(ouvertes: list[dict], aujourdhui: date, stats: list[dict] | None = N
     nb_pays = len([p for p in par_pays if p != SANS_LIEU])
     par_cloture = sorted(ouvertes, key=lambda o: o["date_cloture"] or "9999-12-31")
     urgentes = [o for o in par_cloture if _ferme_bientot(o, aujourdhui)]
-    nouvelles = [o for o in par_cloture if o.get("vue_le") == jour]
+    nb_nouvelles = len([o for o in ouvertes if o.get("vue_le") == jour])
 
     L = [
         '<a name="haut"></a>',
         "",
-        "# 💼 Offres d'emploi tech en Afrique",
+        f'<img src="{escape(PHOTO)}" width="100%" alt="Développeur au travail dans un bureau à Nairobi">',
         "",
-        "**Les postes en informatique, data, développement, systèmes d'information, GIS et statistiques "
-        "publiés en Afrique par l'ONU, l'UNESCO, l'Union africaine et la Banque africaine de développement.**",
+        f'<p align="right"><sub>Photo : <a href="{PHOTO_PAGE}">{PHOTO_AUTEUR}, Pexels</a></sub></p>',
         "",
-        "Cette page est mise à jour automatiquement chaque matin. "
-        "Cliquez sur le titre d'une offre pour lire la fiche complète et postuler sur le site officiel de l'organisation.",
+        "# Offres d'emploi tech en Afrique",
         "",
-        f"> **{_pluriel(len(ouvertes), 'offre ouverte')}** "
-        f"dans **{nb_pays} pays** · **{_pluriel(len(nouvelles), 'nouvelle offre')}** aujourd'hui "
-        f"· mise à jour le {date_fr(jour)}",
+        "Les postes en informatique, data, développement, GIS et statistiques publiés en Afrique "
+        "par l'ONU, l'UNESCO, l'Union africaine et la Banque africaine de développement. "
+        "La page est mise à jour chaque matin.",
+        "",
+        f"**{_pluriel(len(ouvertes), 'offre ouverte')} · {nb_pays} pays · "
+        f"{_pluriel(nb_nouvelles, 'nouvelle')} aujourd'hui** · mise à jour le {date_fr(jour)}",
         "",
     ]
 
     if not ouvertes:
         L += ["Aucune offre ouverte pour le moment. Revenez demain.", ""]
     else:
-        liens = [f"[{drapeau(p)} {p} ({len(par_pays[p])})](#{ancre(p)})" for p in ordre_pays]
-        L += ["**Aller directement à un pays :** " + " · ".join(liens), ""]
+        liens = [f"[{p} ({len(par_pays[p])})](#{ancre(p)})" for p in ordre_pays]
+        L += ["Pays : " + " · ".join(liens), ""]
 
     if urgentes:
-        L += [f"## ⏳ Ferment dans les {JOURS_URGENTS} prochains jours", ""] + _tableau(urgentes, aujourdhui) + [""]
-
-    if nouvelles:
-        L += ["## 🆕 Nouvelles offres du jour", ""] + _tableau(nouvelles, aujourdhui) + [""]
+        L += [f"## Ferment dans les {JOURS_URGENTS} prochains jours", ""]
+        L += _tableau(urgentes, aujourdhui, avec_pays=True) + [""]
 
     if ouvertes:
-        L += ["## 🌍 Toutes les offres, par pays", ""]
+        L += ["## Toutes les offres", ""]
         for pays in ordre_pays:
-            L += [f'<a name="{ancre(pays)}"></a>', "", f"### {drapeau(pays)} {pays} ({len(par_pays[pays])})", ""]
-            for o in sorted(par_pays[pays], key=lambda o: o["date_cloture"] or "9999-12-31"):
-                L += _bloc_offre(o, aujourdhui)
-            L += ["[↑ Retour en haut](#haut)", ""]
+            offres = sorted(par_pays[pays], key=lambda o: o["date_cloture"] or "9999-12-31")
+            L += [f'<a name="{ancre(pays)}"></a>', "", f"### {pays}", ""]
+            L += _tableau(offres, aujourdhui, avec_pays=False)
+            L += ["", "[Retour en haut](#haut)", ""]
 
     graphiques = [graphique_pays(par_pays), graphique_organisations(ouvertes), graphique_evolution(stats or [])]
     graphiques = [g for g in graphiques if g]
     if graphiques:
-        L += ["## 📊 En chiffres", ""]
+        L += ["## En chiffres", "", "<details>", "<summary>Afficher les graphiques</summary>", ""]
         for g in graphiques:
             L += g + [""]
+        L += ["</details>", ""]
 
-    L += ["## ℹ️ Bon à savoir", "", "**Comment lire le niveau d'un poste**", ""]
+    L += ["## Bon à savoir", "", "<details>", "<summary>Comment lire le niveau d'un poste</summary>", ""]
     L += [f"- **{nom}** : {texte}" for nom, texte in NIVEAUX]
     L += [
         "",
-        "**Pour postuler**",
+        "</details>",
+        "",
+        "<details>",
+        "<summary>Conseils pour postuler</summary>",
         "",
         "- La candidature se fait toujours sur le site officiel de l'organisation, en suivant le lien de l'offre.",
         "- Les organisations internationales ne demandent jamais de frais pour postuler. "
         "Méfiez-vous de toute demande de paiement.",
         "- Vérifiez la date de clôture et les conditions (nationalité, langues, expérience) sur la fiche de l'offre.",
         "",
-        "**Organisations suivies**",
+        "</details>",
+        "",
+        "<details>",
+        "<summary>Organisations suivies</summary>",
         "",
     ]
     L += [f"- [{sigle}]({url}) : {nom}" for sigle, nom, url in ORGANISATIONS]
     L += [
         "",
+        "</details>",
+        "",
         "---",
         "",
-        "Les offres appartiennent aux organisations qui les publient. Cette page reprend uniquement le titre, "
+        "<sub>Les offres appartiennent aux organisations qui les publient. Cette page reprend uniquement le titre, "
         "le lieu, le niveau et les dates, avec un lien vers l'annonce officielle. "
-        "Fonctionnement du projet : [TECHNIQUE.md](TECHNIQUE.md).",
+        "Fonctionnement du projet : [TECHNIQUE.md](TECHNIQUE.md).</sub>",
         "",
     ]
     return "\n".join(L)

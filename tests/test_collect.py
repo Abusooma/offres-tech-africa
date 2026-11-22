@@ -120,8 +120,9 @@ def test_niveau_lisible():
 def test_affichage_groupe_par_pays():
     offres = un_careers.analyser((FIXTURES / "un_jobfeed.xml").read_text(encoding="utf-8"))
     texte = affichage.generer(offres, date(2026, 11, 22))
-    assert "### 🇰🇪 Kenya (1)" in texte
-    assert "17 décembre 2026 (dans 25 jours)" in texte
+    assert "### Kenya" in texte
+    assert "17 déc. 2026, dans 25 jours" in texte
+    assert '<a name="kenya"></a>' in texte and "(#kenya)" in texte
 
 
 # ------------------------------------------------- Workday : gestion du 429
@@ -173,8 +174,8 @@ def test_lire_date():
 
 
 def test_sitemap_et_tri_sur_le_titre():
-    liens = successfactors.lire_sitemap((FIXTURES / "au_sitemap.xml").read_text(encoding="utf-8"))
-    assert len(liens) == 3
+    liens, sous = successfactors.lire_sitemap((FIXTURES / "au_sitemap.xml").read_text(encoding="utf-8"))
+    assert len(liens) == 3 and sous == []
     assert successfactors.titre_depuis_lien(liens[1]) == "Addis Ababa Senior ICT Officer (MIS)"
     candidats = [l for l in liens if filtres.est_tech(successfactors.titre_depuis_lien(l))]
     assert len(candidats) == 2  # le poste de comptable n'est pas ouvert
@@ -234,7 +235,8 @@ def test_affichage_lieu_non_precise_en_dernier():
     ]
     texte = affichage.generer(offres, date(2026, 11, 22))
     assert texte.index("Kenya") < texte.index("Lieu non précisé")
-    assert "**1 pays**" in texte
+    assert "### Lieu non précisé" in texte
+    assert "· 1 pays ·" in texte
 
 
 # -------------------------------------------------------------- Graphiques
@@ -256,3 +258,31 @@ def test_pas_de_courbe_avec_un_seul_jour():
     offres = un_careers.analyser((FIXTURES / "un_jobfeed.xml").read_text(encoding="utf-8"))
     texte = affichage.generer(offres, date(2026, 11, 22), [{"date": "2026-11-22", "offres_ouvertes": "3", "nouvelles_offres": "3"}])
     assert texte.count("```mermaid") == 2
+
+
+
+def test_sitemap_autres_formats():
+    # Préfixe d'espace de noms, entités HTML, sitemap d'index.
+    xml = (
+        '<ns0:urlset xmlns:ns0="x"><ns0:url><ns0:loc>https://a.org/job/Dakar-Data-Officer/12/</ns0:loc></ns0:url>'
+        '<ns0:url><ns0:loc> https://a.org/job/Rabat-IT-Lead/13/?x=1&amp;y=2 </ns0:loc></ns0:url></ns0:urlset>'
+    )
+    liens, _ = successfactors.lire_sitemap(xml)
+    assert liens == ["https://a.org/job/Dakar-Data-Officer/12/", "https://a.org/job/Rabat-IT-Lead/13/?x=1&y=2"]
+    index = "<sitemapindex><sitemap><loc>https://a.org/sitemap_jobs_1.xml</loc></sitemap></sitemapindex>"
+    assert successfactors.lire_sitemap(index) == ([], ["https://a.org/sitemap_jobs_1.xml"])
+
+
+def test_afdb_rss():
+    xml = """<rss><channel>
+      <item><title>IT Systems and Web Specialist</title>
+        <link>https://www.afdb.org/en/vacancy/it-systems-and-web-specialist-98700</link>
+        <pubDate>Mon, 16 Nov 2026 10:00:00 +0000</pubDate></item>
+      <item><title>Chief Program Officer, PSF</title>
+        <link>https://www.afdb.org/en/vacancy/chief-program-officer-psf-98650</link>
+        <pubDate>Mon, 16 Nov 2026 10:00:00 +0000</pubDate></item>
+    </channel></rss>"""
+    offres = afdb.analyser_rss(xml)
+    assert [o["id"] for o in offres] == ["afdb-98700"]
+    assert offres[0]["date_publication"] == "2026-11-16"
+    assert offres[0]["pays"] == ""

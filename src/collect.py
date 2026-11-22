@@ -138,7 +138,6 @@ def main() -> int:
     ecrire_csv(FICHIER_STATS, sorted(stats, key=lambda s: s["date"]), list(stats[-1].keys()))
 
     ecrire_readme(affichage.generer(ouvertes, aujourdhui, stats))
-
     message = message_commit(jour, nouvelles, ouvertes)
     FICHIER_MESSAGE.write_text(message, encoding="utf-8")
     print(message)

@@ -11,8 +11,8 @@ from __future__ import annotations
 
 import re
 import time
-import xml.etree.ElementTree as ET
 from datetime import datetime
+from html import unescape
 from urllib.parse import unquote
 
 from bs4 import BeautifulSoup
@@ -44,17 +44,16 @@ SITES = [
 ]
 
 PAUSE = 2.0
-_NS = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9"}
 
 
 # ---------------------------------------------------------------- Sitemap
 
-def lire_sitemap(xml: str) -> list[str]:
-    racine = ET.fromstring(xml)
-    liens = [loc.text.strip() for loc in racine.iterfind(".//s:loc", _NS) if loc.text]
-    if not liens:  # sitemap sans espace de noms
-        liens = [loc.text.strip() for loc in racine.iter("loc") if loc.text]
-    return [l for l in liens if "/job/" in l]
+def lire_sitemap(xml: str) -> tuple[list[str], list[str]]:
+    """Renvoie (liens d'offres, sous-sitemaps). Indépendant de l'espace de noms XML."""
+    liens = [unescape(l.strip()) for l in re.findall(r"<(?:\w+:)?loc>\s*(.*?)\s*</(?:\w+:)?loc>", xml, re.S)]
+    offres = [l for l in liens if "/job/" in l]
+    sous_sitemaps = [l for l in liens if "/job/" not in l and ".xml" in l.lower()]
+    return offres, sous_sitemaps
 
 
 def titre_depuis_lien(lien: str) -> str:
@@ -137,10 +136,25 @@ def analyser_fiche(site: dict, lien: str, html: str) -> dict | None:
 
 # --------------------------------------------------------------- Collecte
 
-def collecter_site(session, site: dict) -> list[dict]:
+def _liens_du_sitemap(session, site: dict) -> list[str]:
     reponse = session.get(f"{site['url']}/sitemap.xml", timeout=60)
     reponse.raise_for_status()
-    liens = lire_sitemap(reponse.text)
+    offres, sous_sitemaps = lire_sitemap(reponse.text)
+    for url in sous_sitemaps[:10]:  # sitemap d'index : on suit les sous-sitemaps
+        time.sleep(PAUSE)
+        sous = session.get(url, timeout=60)
+        sous.raise_for_status()
+        offres += lire_sitemap(sous.text)[0]
+    if not offres:
+        # Aide au diagnostic : on montre le début de la réponse reçue.
+        apercu = re.sub(r"\s+", " ", reponse.text[:300])
+        print(f"  {site['sigle']} : sitemap sans offre (HTTP {reponse.status_code}, "
+              f"type {reponse.headers.get('Content-Type', '?')}) : {apercu}")
+    return list(dict.fromkeys(offres))
+
+
+def collecter_site(session, site: dict) -> list[dict]:
+    liens = _liens_du_sitemap(session, site)
     candidats = [l for l in liens if filtres.est_tech(titre_depuis_lien(l))]
 
     offres = []
