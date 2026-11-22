@@ -157,3 +157,81 @@ def test_workday_abandonne_apres_trois_429(monkeypatch):
     session = _Session([_Reponse(429)] * 3)
     with pytest.raises(workday.TropDeRequetes):
         workday._requete(session, "POST", "https://exemple")
+
+
+# ------------------------------------------------- UNESCO / UA (SuccessFactors)
+
+from sources import afdb, successfactors  # noqa: E402
+from sources.tableaux_html import lire_date, lire_tableau  # noqa: E402
+
+
+def test_lire_date():
+    assert lire_date("21 Nov 2026") == "2026-11-21"
+    assert lire_date("9/12/2026") == "2026-12-09"
+    assert lire_date("16-Nov-2026") == "2026-11-16"
+    assert lire_date("bientôt") == ""
+
+
+def test_sitemap_et_tri_sur_le_titre():
+    liens = successfactors.lire_sitemap((FIXTURES / "au_sitemap.xml").read_text(encoding="utf-8"))
+    assert len(liens) == 3
+    assert successfactors.titre_depuis_lien(liens[1]) == "Addis Ababa Senior ICT Officer (MIS)"
+    candidats = [l for l in liens if filtres.est_tech(successfactors.titre_depuis_lien(l))]
+    assert len(candidats) == 2  # le poste de comptable n'est pas ouvert
+
+
+def test_fiche_union_africaine():
+    site = successfactors.SITES[1]
+    lien = "https://jobs.au.int/job/Addis-Ababa-Senior-ICT-Officer-%28MIS%29/1377900001/"
+    offre = successfactors.analyser_fiche(site, lien, (FIXTURES / "au_fiche.html").read_text(encoding="utf-8"))
+    assert offre["id"] == "ua-1377900001"
+    assert offre["titre"] == "Senior ICT Officer (MIS)"
+    assert offre["pays"] == "Éthiopie"
+    assert offre["ville"] == "Addis Ababa"
+    assert offre["niveau"] == "P3"
+    assert offre["date_publication"] == "2026-11-18"
+    assert offre["date_cloture"] == "2026-12-01"
+
+
+def test_fiche_unesco():
+    site = successfactors.SITES[0]
+    lien = "https://careers.unesco.org/job/Dakar-Information-Management-Officer/1379000001/"
+    offre = successfactors.analyser_fiche(site, lien, (FIXTURES / "unesco_fiche.html").read_text(encoding="utf-8"))
+    assert offre["titre"] == "Information Management Officer"
+    assert offre["pays"] == "Sénégal"
+    assert offre["ville"] == "Dakar"
+    assert offre["niveau"] == "P-2"
+    assert offre["date_cloture"] == "2026-12-09"  # 09/12/26 = jour/mois
+
+
+# ------------------------------------------------------------------- BAD
+
+def test_afdb_postes():
+    url = afdb.PAGES[0]
+    lignes = lire_tableau((FIXTURES / "afdb_vacancies.html").read_text(encoding="utf-8"), url)
+    offres = [o for o in map(afdb.analyser_ligne, lignes) if o]
+    assert [o["titre"] for o in offres] == ["IT Systems and Web Specialist"]
+    assert offres[0]["pays"] == "Côte d'Ivoire"
+    assert offres[0]["niveau"] == "PL5"
+    assert offres[0]["date_cloture"] == "2026-12-06"
+    assert offres[0]["url"] == "https://www.afdb.org/en/vacancy/it-systems-and-web-specialist-98700"
+
+
+def test_afdb_consultances_sans_lieu_et_sans_cabinets():
+    url = afdb.PAGES[1]
+    lignes = lire_tableau((FIXTURES / "afdb_consultants.html").read_text(encoding="utf-8"), url)
+    offres = [o for o in map(afdb.analyser_ligne, lignes) if o]
+    assert len(offres) == 1  # cabinet exclu, Research Analyst pas tech
+    assert offres[0]["id"] == "afdb-98776"
+    assert offres[0]["pays"] == ""
+    assert offres[0]["niveau"] == "Individual Consultant"
+
+
+def test_affichage_lieu_non_precise_en_dernier():
+    offres = [
+        {"titre": "A", "url": "u", "organisation": "BAD", "ville": "", "pays": "", "niveau": "", "date_cloture": ""},
+        {"titre": "B", "url": "u", "organisation": "ONU", "ville": "Nairobi", "pays": "Kenya", "niveau": "", "date_cloture": ""},
+    ]
+    texte = affichage.generer(offres, date(2026, 11, 22))
+    assert texte.index("Kenya") < texte.index("Lieu non précisé")
+    assert "· 1 pays ·" in texte

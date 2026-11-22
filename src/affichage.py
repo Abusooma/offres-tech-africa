@@ -27,6 +27,9 @@ CODES_PAYS = {
 }
 
 
+SANS_LIEU = "Lieu non précisé"
+
+
 def drapeau(pays: str) -> str:
     code = CODES_PAYS.get(pays)
     if not code:
@@ -62,6 +65,14 @@ def niveau_lisible(niveau: str) -> str:
         return "Consultant"
     if n.startswith("I-"):
         return "Stage"
+    if n.startswith("PL"):
+        return f"Professionnel ({n})"
+    if n.startswith("GS"):
+        return f"Services généraux ({n})"
+    if n == "INDIVIDUAL CONSULTANT":
+        return "Consultant individuel"
+    if n == "JUNIOR CONSULTANT":
+        return "Consultant junior"
     if n.startswith("P-"):
         return f"Professionnel ({n})"
     if n.startswith("D-"):
@@ -92,20 +103,21 @@ def generer(ouvertes: list[dict], aujourdhui: date) -> str:
     nb_orgs = len({o["organisation"] for o in ouvertes})
     par_pays = defaultdict(list)
     for offre in ouvertes:
-        par_pays[offre["pays"]].append(offre)
+        par_pays[offre["pays"] or SANS_LIEU].append(offre)
+    nb_pays = len([p for p in par_pays if p != SANS_LIEU])
 
     s = lambda n: "s" if n > 1 else ""  # noqa: E731
     lignes = [
         f"**{len(ouvertes)} offre{s(len(ouvertes))} ouverte{s(len(ouvertes))}** "
-        f"· {nb_orgs} organisation{s(nb_orgs)} · {len(par_pays)} pays "
+        f"· {nb_orgs} organisation{s(nb_orgs)} · {nb_pays} pays "
         f"· mise à jour le {date_fr(aujourdhui.isoformat())}",
         "",
     ]
     if not ouvertes:
         lignes.append("Aucune offre ouverte aujourd'hui.")
 
-    # Pays avec le plus d'offres en premier, puis ordre alphabétique.
-    for pays in sorted(par_pays, key=lambda p: (-len(par_pays[p]), p)):
+    # Pays avec le plus d'offres en premier, puis ordre alphabétique ; lieu non précisé à la fin.
+    for pays in sorted(par_pays, key=lambda p: (p == SANS_LIEU, -len(par_pays[p]), p)):
         offres = sorted(par_pays[pays], key=lambda o: o["date_cloture"] or "9999-12-31")
         lignes += [f"### {drapeau(pays)} {pays} ({len(offres)})", ""]
         for o in offres:

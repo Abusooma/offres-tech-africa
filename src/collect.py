@@ -1,6 +1,6 @@
 """Collecte quotidienne des offres d'emploi tech des organisations internationales en Afrique.
 
-Sources : flux RSS de careers.un.org (Secrétariat de l'ONU) et site carrière Workday du HCR.
+Sources : ONU (careers.un.org), UNESCO, Union africaine, Banque africaine de développement.
 Usage :  python src/collect.py
 """
 
@@ -16,11 +16,14 @@ import requests
 
 sys.path.insert(0, str(Path(__file__).parent))
 import affichage  # noqa: E402
-from sources import USER_AGENT, un_careers, workday  # noqa: E402
+from sources import USER_AGENT, afdb, successfactors, un_careers, workday  # noqa: E402
 
 SOURCES = {
-    "careers.un.org": un_careers.collecter,
-    "Workday (HCR)": workday.collecter,
+    "ONU (careers.un.org)": un_careers.collecter,
+    "UNESCO et Union africaine": successfactors.collecter,
+    "Banque africaine de développement": afdb.collecter,
+    # Désactivé : le site Workday du HCR répond 429 aux serveurs de GitHub Actions.
+    # "Workday (HCR)": workday.collecter,
 }
 
 RACINE = Path(__file__).resolve().parent.parent
@@ -84,7 +87,7 @@ def ligne_stats(jour: str, ouvertes: list[dict], nouvelles: list[dict]) -> dict:
         "offres_ouvertes": len(ouvertes),
         "nouvelles_offres": len(nouvelles),
         "organisations": len({o["organisation"] for o in ouvertes}),
-        "pays": len({o["pays"] for o in ouvertes}),
+        "pays": len({o["pays"] for o in ouvertes if o["pays"]}),
         "organisation_top": top[0][0] if top else "",
     }
 

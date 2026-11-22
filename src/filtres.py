@@ -98,3 +98,38 @@ def est_tech(titre: str, famille: str = "") -> bool:
     if _REGEX_TECH.search(famille or ""):
         return True
     return bool(_REGEX_TECH.search(titre)) and not _EXCLUSIONS.search(titre)
+
+
+# Codes ISO à deux lettres (certains sites écrivent "Addis Ababa, ET").
+CODES_ISO = {
+    "DZ": "Algérie", "AO": "Angola", "BJ": "Bénin", "BW": "Botswana", "BF": "Burkina Faso",
+    "BI": "Burundi", "CV": "Cap-Vert", "CM": "Cameroun", "CF": "Centrafrique", "TD": "Tchad",
+    "KM": "Comores", "CG": "Congo", "CD": "RD Congo", "CI": "Côte d'Ivoire", "DJ": "Djibouti",
+    "EG": "Égypte", "GQ": "Guinée équatoriale", "ER": "Érythrée", "SZ": "Eswatini",
+    "ET": "Éthiopie", "GA": "Gabon", "GM": "Gambie", "GH": "Ghana", "GN": "Guinée",
+    "GW": "Guinée-Bissau", "KE": "Kenya", "LS": "Lesotho", "LR": "Libéria", "LY": "Libye",
+    "MG": "Madagascar", "MW": "Malawi", "ML": "Mali", "MR": "Mauritanie", "MU": "Maurice",
+    "MA": "Maroc", "MZ": "Mozambique", "NA": "Namibie", "NE": "Niger", "NG": "Nigéria",
+    "RW": "Rwanda", "ST": "Sao Tomé-et-Principe", "SN": "Sénégal", "SC": "Seychelles",
+    "SL": "Sierra Leone", "SO": "Somalie", "ZA": "Afrique du Sud", "SS": "Soudan du Sud",
+    "SD": "Soudan", "TZ": "Tanzanie", "TG": "Togo", "TN": "Tunisie", "UG": "Ouganda",
+    "ZM": "Zambie", "ZW": "Zimbabwe", "EH": "Sahara occidental",
+}
+_NOMS_FR = {_sans_accents(v).lower(): v for v in PAYS.values()}
+
+
+def pays_depuis_lieu(lieu: str) -> str | None:
+    """'Paris, France' -> None, 'Abidjan, Côte d’Ivoire' -> "Côte d'Ivoire",
+    'Addis Ababa, ET' -> 'Éthiopie', 'Nairobi' -> 'Kenya'."""
+    if not lieu:
+        return None
+    lieu = lieu.replace("’", "'").strip()
+    morceaux = [m.strip() for m in lieu.split(",") if m.strip()]
+    for morceau in reversed(morceaux):
+        if morceau in PAYS:
+            return PAYS[morceau]
+        if morceau.upper() in CODES_ISO and len(morceau) == 2:
+            return CODES_ISO[morceau.upper()]
+        if _sans_accents(morceau).lower() in _NOMS_FR:
+            return _NOMS_FR[_sans_accents(morceau).lower()]
+    return pays_depuis_ville(morceaux[0]) if morceaux else None

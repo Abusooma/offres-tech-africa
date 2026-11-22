@@ -1,15 +1,19 @@
 # Offres tech en Afrique dans les organisations internationales
 
-Collecte automatique, chaque matin, des offres d'emploi dans les métiers de la tech (ICT, data, développement, GIS, systèmes d'information, statistiques) publiées en Afrique par les organisations internationales.
+Collecte automatique, chaque matin, des offres d'emploi dans les métiers de la tech (ICT, data, développement, GIS, systèmes d'information, statistiques) publiées en Afrique par les organisations internationales et panafricaines.
 
 ## Sources
 
-| Source | Organisations couvertes | Accès |
+| Organisation | Source | Accès |
 |---|---|---|
-| [careers.un.org](https://careers.un.org) | Secrétariat de l'ONU : CEA, PNUE, ONU-Habitat, OCHA, missions de paix, bureaux de Nairobi et Addis-Abeba... | Flux RSS public `careers.un.org/jobfeed` |
-| [Carrières HCR](https://unhcr.wd3.myworkdayjobs.com/External) | HCR (UNHCR) | API JSON du site carrière Workday |
+| ONU (Secrétariat : CEA, PNUE, ONU-Habitat, OCHA, missions de paix...) | [careers.un.org](https://careers.un.org) | Flux RSS public |
+| UNESCO | [careers.unesco.org](https://careers.unesco.org) | Sitemap public et fiches des offres |
+| Union africaine | [jobs.au.int](https://jobs.au.int) | Sitemap public et fiches des offres |
+| Banque africaine de développement | [afdb.org](https://www.afdb.org/en/about-careers/current-vacancies) | Pages des postes et des consultances |
 
-Chaque source est indépendante : si l'une est en panne, les autres continuent d'alimenter le dépôt.
+Chaque source est indépendante : si l'une est en panne, les autres continuent d'alimenter le dépôt. La collecte respecte le robots.txt de chaque site et marque une pause entre les requêtes.
+
+Organisations non couvertes : le HCR (son site refuse les requêtes venant de GitHub Actions), l'UNICEF (son robots.txt exclut la recherche automatisée), l'OMS (ses flux RSS n'indiquent pas le lieu du poste).
 
 ## Fonctionnement
 
@@ -25,8 +29,11 @@ src/
 ├── collect.py          # orchestration : collecte, fusion, statistiques, README
 ├── filtres.py          # pays et villes africaines, mots-clés tech
 └── sources/
-    ├── un_careers.py   # flux RSS de l'ONU
-    └── workday.py      # sites carrières Workday (HCR)
+    ├── un_careers.py      # flux RSS de l'ONU
+    ├── successfactors.py  # UNESCO et Union africaine
+    ├── afdb.py            # Banque africaine de développement
+    ├── tableaux_html.py   # lecture des tableaux d'offres en HTML
+    └── workday.py         # sites carrières Workday (désactivé)
 data/
 ├── offres.csv              # historique de toutes les offres vues
 └── stats_journalieres.csv  # une ligne par jour
@@ -49,17 +56,7 @@ pytest
 ## Offres ouvertes
 
 <!-- OFFRES:DEBUT -->
-_Mis à jour le 2026-11-22 : 7 offres ouvertes, 5 organisations, 3 pays._
-
-| Poste | Organisation | Lieu | Niveau | Clôture |
-|---|---|---|---|---|
-| [ACS/Data Innovation and Analytics](https://careers.un.org/jobSearchDescription/287673?language=en) | CEA | Addis Ababa, Éthiopie | CON | 2026-11-23 |
-| [Programme Officer (Migrant Smuggling and Cybercrime Investigation) - temporary](https://careers.un.org/jobSearchDescription/287979?language=en) | ONUDC | Rabat, Maroc | P-3 | 2026-11-23 |
-| [Intern - Data analytics](https://careers.un.org/jobSearchDescription/287931?language=en) | ONU-Habitat | Nairobi, Kenya | I-1 | 2026-11-25 |
-| [Information Systems  Intern](https://careers.un.org/jobSearchDescription/288738?language=en) | PNUE | Nairobi, Kenya | I-1 | 2026-11-28 |
-| [Senior Consultant: Scientific Assessment and Expert Group Coordination on the Environmental Sustainability of Artificial Intelligence](https://careers.un.org/jobSearchDescription/288720?language=en) | PNUE | Nairobi, Kenya | CON | 2026-11-30 |
-| [Software Application Developer](https://careers.un.org/jobSearchDescription/288576?language=en) | PNUE | Nairobi, Kenya | CON | 2026-11-30 |
-| [DIGITAL FORENSIC INVESTIGATOR](https://careers.un.org/jobSearchDescription/282126?language=en) | Office of Internal Oversight Services | Nairobi, Kenya | P-4 | 2026-12-12 |
+_La liste apparaîtra après la première collecte._
 <!-- OFFRES:FIN -->
 
 ## Données
