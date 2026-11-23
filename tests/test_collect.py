@@ -86,6 +86,41 @@ def test_fusion_garde_la_premiere_date_vue():
     assert toutes[offres[0]["id"]]["derniere_vue"] == "2026-11-21"
 
 
+def test_deuxieme_collecte_du_jour_garde_les_nouvelles():
+    offres = un_careers.analyser((FIXTURES / "un_jobfeed.xml").read_text(encoding="utf-8"))
+    toutes, _ = collect.fusionner({}, offres, "2026-11-23")
+    toutes, nouvelles = collect.fusionner(toutes, offres, "2026-11-23")
+    assert nouvelles == []
+    assert len(collect.nouvelles_du_jour(toutes, "2026-11-23")) == 3
+    assert collect.nouvelles_du_jour(toutes, "2026-11-24") == []
+
+
+def _offre(id_, source, derniere_vue, cloture=""):
+    return {"id": id_, "source": source, "derniere_vue": derniere_vue, "date_cloture": cloture}
+
+
+def test_source_en_panne_garde_ses_offres_recentes():
+    toutes = {o["id"]: o for o in [
+        _offre("onu-vue", "careers.un.org", "2026-11-23"),
+        _offre("bad-hier", "afdb.org", "2026-11-22"),
+        _offre("bad-rss", "afdb.org (RSS)", "2026-11-20"),
+        _offre("bad-ancienne", "afdb.org", "2026-11-10"),
+        _offre("bad-close", "afdb.org", "2026-11-22", cloture="2026-11-21"),
+        _offre("onu-disparue", "careers.un.org", "2026-11-22"),
+    ]}
+    ids = {o["id"] for o in collect.offres_affichees(toutes, date(2026, 11, 23), ["Banque africaine de développement"])}
+    assert ids == {"onu-vue", "bad-hier", "bad-rss"}
+
+
+def test_sans_panne_seules_les_offres_du_jour():
+    toutes = {"bad-hier": _offre("bad-hier", "afdb.org", "2026-11-22")}
+    assert collect.offres_affichees(toutes, date(2026, 11, 23), []) == []
+
+
+def test_chaque_source_a_ses_origines():
+    assert set(collect.ORIGINES) == set(collect.SOURCES)
+
+
 def test_message_commit():
     offres = un_careers.analyser((FIXTURES / "un_jobfeed.xml").read_text(encoding="utf-8"))
     assert collect.message_commit("2026-11-21", offres, offres).startswith(
@@ -240,6 +275,12 @@ def test_affichage_lieu_non_precise_en_dernier():
 
 
 # -------------------------------------------------------------- Graphiques
+
+def test_affichage_signale_une_source_indisponible():
+    texte = affichage.generer([], date(2026, 11, 23), indisponibles=["Banque africaine de développement"])
+    assert "Source indisponible aujourd'hui : Banque africaine de développement." in texte
+    assert "indisponible" not in affichage.generer([], date(2026, 11, 23))
+
 
 def test_graphiques_mermaid():
     offres = un_careers.analyser((FIXTURES / "un_jobfeed.xml").read_text(encoding="utf-8"))

@@ -243,7 +243,12 @@ PHOTO_PAGE = ""
 PHOTO_AUTEUR = ""
 
 
-def generer(ouvertes: list[dict], aujourdhui: date, stats: list[dict] | None = None) -> str:
+def generer(
+    ouvertes: list[dict],
+    aujourdhui: date,
+    stats: list[dict] | None = None,
+    indisponibles: list[str] | None = None,
+) -> str:
     """Construit tout le README, pensé pour les candidats."""
     jour = aujourdhui.isoformat()
     par_pays = defaultdict(list)
@@ -275,6 +280,14 @@ def generer(ouvertes: list[dict], aujourdhui: date, stats: list[dict] | None = N
         f"{_pluriel(nb_nouvelles, 'nouvelle')} aujourd'hui** · mise à jour le {date_fr(jour)}",
         "",
     ]
+
+    if indisponibles:
+        s = "s" if len(indisponibles) > 1 else ""
+        L += [
+            f"> Source{s} indisponible{s} aujourd'hui : {', '.join(indisponibles)}. "
+            "Les offres déjà connues restent affichées jusqu'à leur clôture.",
+            "",
+        ]
 
     if not ouvertes:
         L += ["Aucune offre ouverte pour le moment. Revenez demain.", ""]

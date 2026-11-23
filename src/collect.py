@@ -9,7 +9,7 @@ from __future__ import annotations
 import csv
 import sys
 from collections import Counter
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
 import requests
@@ -25,6 +25,16 @@ SOURCES = {
     # Désactivé : le site Workday du HCR répond 429 aux serveurs de GitHub Actions.
     # "Workday (HCR)": workday.collecter,
 }
+
+# Début de la colonne "source" des offres de chaque source : sert à retrouver
+# les offres déjà connues d'une source en panne.
+ORIGINES = {
+    "ONU (careers.un.org)": ("careers.un.org",),
+    "UNESCO et Union africaine": tuple(site["url"].split("//")[1] for site in successfactors.SITES),
+    "Banque africaine de développement": ("afdb.org",),
+}
+# Une source en panne garde ses offres vues dans les derniers jours, pas au-delà.
+JOURS_DE_GRACE = 7
 
 RACINE = Path(__file__).resolve().parent.parent
 FICHIER_OFFRES = RACINE / "data" / "offres.csv"
@@ -78,6 +88,28 @@ def fusionner(existantes: dict[str, dict], collectees: list[dict], jour: str) ->
     return toutes, nouvelles
 
 
+def offres_affichees(toutes: dict[str, dict], aujourdhui: date, echecs: list[str]) -> list[dict]:
+    """Offres ouvertes vues aujourd'hui, plus celles d'une source en panne vues récemment.
+
+    Sans cela, une source qui refuse la collecte un jour ferait disparaître toutes ses offres.
+    """
+    jour = aujourdhui.isoformat()
+    origines = tuple(debut for nom in echecs for debut in ORIGINES.get(nom, ()))
+    limite = (aujourdhui - timedelta(days=JOURS_DE_GRACE)).isoformat()
+
+    def affichee(offre: dict) -> bool:
+        if offre["derniere_vue"] == jour:
+            return True
+        return offre["source"].startswith(origines) and offre["derniere_vue"] >= limite
+
+    return [o for o in toutes.values() if affichee(o) and est_ouverte(o, aujourdhui)]
+
+
+def nouvelles_du_jour(toutes: dict[str, dict], jour: str) -> list[dict]:
+    """Offres vues pour la première fois aujourd'hui, même si la collecte tourne deux fois."""
+    return [o for o in toutes.values() if o["vue_le"] == jour]
+
+
 def ligne_stats(jour: str, ouvertes: list[dict], nouvelles: list[dict]) -> dict:
     top = Counter(o["organisation"] for o in ouvertes).most_common(1)
     return {
@@ -129,15 +161,16 @@ def main() -> int:
 
     collectees = list({o["id"]: o for o in collectees}.values())
     existantes = {o["id"]: o for o in lire_csv(FICHIER_OFFRES)}
-    toutes, nouvelles = fusionner(existantes, collectees, jour)
-    ouvertes = [o for o in toutes.values() if o["derniere_vue"] == jour and est_ouverte(o, aujourdhui)]
+    toutes, _ = fusionner(existantes, collectees, jour)
+    nouvelles = nouvelles_du_jour(toutes, jour)
+    ouvertes = offres_affichees(toutes, aujourdhui, echecs)
 
     ecrire_csv(FICHIER_OFFRES, sorted(toutes.values(), key=lambda o: (o["vue_le"], o["id"]), reverse=True), COLONNES)
 
     stats = [s for s in lire_csv(FICHIER_STATS) if s["date"] != jour] + [ligne_stats(jour, ouvertes, nouvelles)]
     ecrire_csv(FICHIER_STATS, sorted(stats, key=lambda s: s["date"]), list(stats[-1].keys()))
 
-    ecrire_readme(affichage.generer(ouvertes, aujourdhui, stats))
+    ecrire_readme(affichage.generer(ouvertes, aujourdhui, stats, echecs))
     message = message_commit(jour, nouvelles, ouvertes)
     FICHIER_MESSAGE.write_text(message, encoding="utf-8")
     print(message)
