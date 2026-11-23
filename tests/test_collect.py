@@ -86,6 +86,15 @@ def test_fusion_garde_la_premiere_date_vue():
     assert toutes[offres[0]["id"]]["derniere_vue"] == "2026-11-21"
 
 
+def test_deuxieme_collecte_du_jour_garde_les_nouvelles():
+    offres = un_careers.analyser((FIXTURES / "un_jobfeed.xml").read_text(encoding="utf-8"))
+    toutes, _ = collect.fusionner({}, offres, "2026-11-23")
+    toutes, nouvelles = collect.fusionner(toutes, offres, "2026-11-23")
+    assert nouvelles == []
+    assert len(collect.nouvelles_du_jour(toutes, "2026-11-23")) == 3
+    assert collect.nouvelles_du_jour(toutes, "2026-11-24") == []
+
+
 def test_message_commit():
     offres = un_careers.analyser((FIXTURES / "un_jobfeed.xml").read_text(encoding="utf-8"))
     assert collect.message_commit("2026-11-21", offres, offres).startswith(
