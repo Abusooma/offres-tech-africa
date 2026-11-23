@@ -2,7 +2,10 @@ name: Collecte quotidienne des offres
 
 on:
   schedule:
-    - cron: "23 6 * * *"   # 07:23 à Tunis et Lagos, 06:23 à Conakry
+    - cron: "23 6 * * *"    # 07:23 à Tunis et Lagos, 06:23 à Conakry
+    # Secours : GitHub retarde ou saute parfois les exécutions planifiées.
+    # Si la collecte du jour a déjà eu lieu, celle-ci s'arrête tout de suite.
+    - cron: "17 13 * * *"
   workflow_dispatch:        # bouton pour lancer à la main depuis l'onglet Actions
 
 permissions:
@@ -22,17 +25,31 @@ jobs:
         with:
           ref: main
 
+      # Seulement pour les exécutions planifiées : un lancement à la main collecte toujours.
+      - name: Vérifier si la collecte du jour a déjà eu lieu
+        id: deja
+        if: github.event_name == 'schedule'
+        run: |
+          if grep -q "^$(date -u +%F)," data/stats_journalieres.csv; then
+            echo "La collecte du $(date -u +%F) a déjà eu lieu, rien à faire."
+            echo "fait=oui" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: actions/setup-python@v5
+        if: steps.deja.outputs.fait != 'oui'
         with:
           python-version: "3.12"
           cache: pip
 
       - run: pip install -r requirements.txt
+        if: steps.deja.outputs.fait != 'oui'
 
       - name: Collecter les offres
+        if: steps.deja.outputs.fait != 'oui'
         run: python src/collect.py
 
       - name: Commiter les données
+        if: steps.deja.outputs.fait != 'oui'
         env:
           AUTEUR_EMAIL: ${{ secrets.COMMIT_EMAIL }}
         run: |
