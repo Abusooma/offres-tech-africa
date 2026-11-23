@@ -78,6 +78,11 @@ def fusionner(existantes: dict[str, dict], collectees: list[dict], jour: str) ->
     return toutes, nouvelles
 
 
+def nouvelles_du_jour(toutes: dict[str, dict], jour: str) -> list[dict]:
+    """Offres vues pour la première fois aujourd'hui, même si la collecte tourne deux fois."""
+    return [o for o in toutes.values() if o["vue_le"] == jour]
+
+
 def ligne_stats(jour: str, ouvertes: list[dict], nouvelles: list[dict]) -> dict:
     top = Counter(o["organisation"] for o in ouvertes).most_common(1)
     return {
@@ -129,7 +134,8 @@ def main() -> int:
 
     collectees = list({o["id"]: o for o in collectees}.values())
     existantes = {o["id"]: o for o in lire_csv(FICHIER_OFFRES)}
-    toutes, nouvelles = fusionner(existantes, collectees, jour)
+    toutes, _ = fusionner(existantes, collectees, jour)
+    nouvelles = nouvelles_du_jour(toutes, jour)
     ouvertes = [o for o in toutes.values() if o["derniere_vue"] == jour and est_ouverte(o, aujourdhui)]
 
     ecrire_csv(FICHIER_OFFRES, sorted(toutes.values(), key=lambda o: (o["vue_le"], o["id"]), reverse=True), COLONNES)
