@@ -6,21 +6,21 @@
 
 Les postes en informatique, data, développement, GIS et statistiques publiés en Afrique par l'ONU, l'UNESCO, l'Union africaine et la Banque africaine de développement. La page est mise à jour chaque matin.
 
-**9 offres ouvertes · 4 pays · 2 nouvelles aujourd'hui** · mise à jour le 23 novembre 2026
+**8 offres ouvertes · 2 pays · 1 nouvelle aujourd'hui** · mise à jour le 24 novembre 2026
 
-Pays : [Kenya (6)](#kenya) · [Libye (1)](#libye) · [Maroc (1)](#maroc) · [Éthiopie (1)](#ethiopie)
+> Source indisponible aujourd'hui : Banque africaine de développement. Les offres déjà connues restent affichées jusqu'à leur clôture.
+
+Pays : [Kenya (7)](#kenya) · [Libye (1)](#libye)
 
 ## Ferment dans les 7 prochains jours
 
 | Poste | Organisation | Lieu | Clôture |
 |---|---|---|---|
-| [Programme Officer (Migrant Smuggling and Cybercrime Investigation) - temporary](https://careers.un.org/jobSearchDescription/287979?language=en) | ONUDC | Rabat, Maroc | **23 nov. 2026, dernier jour** |
-| [ACS/Data Innovation and Analytics](https://careers.un.org/jobSearchDescription/287673?language=en) | CEA | Addis Ababa, Éthiopie | **23 nov. 2026, dernier jour** |
-| [Intern - Data analytics](https://careers.un.org/jobSearchDescription/287931?language=en) | ONU-Habitat | Nairobi, Kenya | **25 nov. 2026, dans 2 jours** |
-| [Information Systems  Intern](https://careers.un.org/jobSearchDescription/288738?language=en) | PNUE | Nairobi, Kenya | 28 nov. 2026, dans 5 jours |
-| [INFORMATION SYSTEMS ASSISTANT](https://careers.un.org/jobSearchDescription/288895?language=en) *(nouveau)* | United Nations Support Mission in Libya | Tripoli (Libya), Libye | 28 nov. 2026, dans 5 jours |
-| [Senior Consultant: Scientific Assessment and Expert Group Coordination on the Environmental Sustainability of Artificial Intelligence](https://careers.un.org/jobSearchDescription/288720?language=en) | PNUE | Nairobi, Kenya | 30 nov. 2026, dans 7 jours |
-| [Software Application Developer](https://careers.un.org/jobSearchDescription/288576?language=en) | PNUE | Nairobi, Kenya | 30 nov. 2026, dans 7 jours |
+| [Intern - Data analytics](https://careers.un.org/jobSearchDescription/287931?language=en) | ONU-Habitat | Nairobi, Kenya | **25 nov. 2026, demain** |
+| [INFORMATION SYSTEMS ASSISTANT](https://careers.un.org/jobSearchDescription/288895?language=en) | United Nations Support Mission in Libya | Tripoli (Libya), Libye | 28 nov. 2026, dans 4 jours |
+| [Information Systems  Intern](https://careers.un.org/jobSearchDescription/288738?language=en) | PNUE | Nairobi, Kenya | 28 nov. 2026, dans 4 jours |
+| [Senior Consultant: Scientific Assessment and Expert Group Coordination on the Environmental Sustainability of Artificial Intelligence](https://careers.un.org/jobSearchDescription/288720?language=en) | PNUE | Nairobi, Kenya | 30 nov. 2026, dans 6 jours |
+| [Software Application Developer](https://careers.un.org/jobSearchDescription/288576?language=en) | PNUE | Nairobi, Kenya | 30 nov. 2026, dans 6 jours |
 
 ## Toutes les offres
 
@@ -30,12 +30,13 @@ Pays : [Kenya (6)](#kenya) · [Libye (1)](#libye) · [Maroc (1)](#maroc) · [Ét
 
 | Poste | Organisation | Ville | Niveau | Clôture |
 |---|---|---|---|---|
-| [Intern - Data analytics](https://careers.un.org/jobSearchDescription/287931?language=en) | ONU-Habitat | Nairobi | Stage | **25 nov. 2026, dans 2 jours** |
-| [Information Systems  Intern](https://careers.un.org/jobSearchDescription/288738?language=en) | PNUE | Nairobi | Stage | 28 nov. 2026, dans 5 jours |
-| [Senior Consultant: Scientific Assessment and Expert Group Coordination on the Environmental Sustainability of Artificial Intelligence](https://careers.un.org/jobSearchDescription/288720?language=en) | PNUE | Nairobi | Consultant | 30 nov. 2026, dans 7 jours |
-| [Software Application Developer](https://careers.un.org/jobSearchDescription/288576?language=en) | PNUE | Nairobi | Consultant | 30 nov. 2026, dans 7 jours |
-| [Digital Skills Programme Consultant](https://careers.un.org/jobSearchDescription/288744?language=en) *(nouveau)* | PNUE | Nairobi | Consultant | 2 déc. 2026, dans 9 jours |
-| [DIGITAL FORENSIC INVESTIGATOR](https://careers.un.org/jobSearchDescription/282126?language=en) | BSCI | Nairobi | Professionnel (P-4) | 12 déc. 2026, dans 19 jours |
+| [Intern - Data analytics](https://careers.un.org/jobSearchDescription/287931?language=en) | ONU-Habitat | Nairobi | Stage | **25 nov. 2026, demain** |
+| [Information Systems  Intern](https://careers.un.org/jobSearchDescription/288738?language=en) | PNUE | Nairobi | Stage | 28 nov. 2026, dans 4 jours |
+| [Senior Consultant: Scientific Assessment and Expert Group Coordination on the Environmental Sustainability of Artificial Intelligence](https://careers.un.org/jobSearchDescription/288720?language=en) | PNUE | Nairobi | Consultant | 30 nov. 2026, dans 6 jours |
+| [Software Application Developer](https://careers.un.org/jobSearchDescription/288576?language=en) | PNUE | Nairobi | Consultant | 30 nov. 2026, dans 6 jours |
+| [Digital Skills Programme Consultant](https://careers.un.org/jobSearchDescription/288744?language=en) | PNUE | Nairobi | Consultant | 2 déc. 2026, dans 8 jours |
+| [Digital Policy and AI Consultant](https://careers.un.org/jobSearchDescription/288799?language=en) *(nouveau)* | PNUE | Nairobi | Consultant | 3 déc. 2026, dans 9 jours |
+| [DIGITAL FORENSIC INVESTIGATOR](https://careers.un.org/jobSearchDescription/282126?language=en) | BSCI | Nairobi | Professionnel (P-4) | 12 déc. 2026, dans 18 jours |
 
 [Retour en haut](#haut)
 
@@ -45,27 +46,7 @@ Pays : [Kenya (6)](#kenya) · [Libye (1)](#libye) · [Maroc (1)](#maroc) · [Ét
 
 | Poste | Organisation | Ville | Niveau | Clôture |
 |---|---|---|---|---|
-| [INFORMATION SYSTEMS ASSISTANT](https://careers.un.org/jobSearchDescription/288895?language=en) *(nouveau)* | United Nations Support Mission in Libya | Tripoli (Libya) | Service mobile (FS-5) | 28 nov. 2026, dans 5 jours |
-
-[Retour en haut](#haut)
-
-<a name="maroc"></a>
-
-### Maroc
-
-| Poste | Organisation | Ville | Niveau | Clôture |
-|---|---|---|---|---|
-| [Programme Officer (Migrant Smuggling and Cybercrime Investigation) - temporary](https://careers.un.org/jobSearchDescription/287979?language=en) | ONUDC | Rabat | Professionnel (P-3) | **23 nov. 2026, dernier jour** |
-
-[Retour en haut](#haut)
-
-<a name="ethiopie"></a>
-
-### Éthiopie
-
-| Poste | Organisation | Ville | Niveau | Clôture |
-|---|---|---|---|---|
-| [ACS/Data Innovation and Analytics](https://careers.un.org/jobSearchDescription/287673?language=en) | CEA | Addis Ababa | Consultant | **23 nov. 2026, dernier jour** |
+| [INFORMATION SYSTEMS ASSISTANT](https://careers.un.org/jobSearchDescription/288895?language=en) | United Nations Support Mission in Libya | Tripoli (Libya) | Service mobile (FS-5) | 28 nov. 2026, dans 4 jours |
 
 [Retour en haut](#haut)
 
@@ -77,29 +58,27 @@ Pays : [Kenya (6)](#kenya) · [Libye (1)](#libye) · [Maroc (1)](#maroc) · [Ét
 ```mermaid
 xychart-beta
     title "Offres ouvertes par pays"
-    x-axis ["Kenya", "Libye", "Maroc", "Éthiopie"]
-    y-axis "Offres" 0 --> 7
-    bar [6, 1, 1, 1]
+    x-axis ["Kenya", "Libye"]
+    y-axis "Offres" 0 --> 8
+    bar [7, 1]
 ```
 
 ```mermaid
 pie showData
     title "Offres ouvertes par organisation"
-    "PNUE" : 4
-    "ONUDC" : 1
-    "ONU-Habitat" : 1
-    "CEA" : 1
-    "BSCI" : 1
+    "PNUE" : 5
     "United Nations Support Mission in Libya" : 1
+    "ONU-Habitat" : 1
+    "BSCI" : 1
 ```
 
 ```mermaid
 xychart-beta
-    title "Évolution sur les 2 derniers jours"
-    x-axis ["22/11", "23/11"]
+    title "Évolution sur les 3 derniers jours"
+    x-axis ["22/11", "23/11", "24/11"]
     y-axis "Offres" 0 --> 10
-    line [7, 9]
-    bar [0, 2]
+    line [7, 9, 8]
+    bar [0, 2, 1]
 ```
 
 _Courbe : offres ouvertes. Barres : nouvelles offres du jour._
