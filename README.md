@@ -80,10 +80,10 @@ xychart-beta
 pie showData
     title "Offres ouvertes par organisation"
     "PNUE" : 6
+    "United Nations Interim Security Force for Abyei- created under GA resolution 1990 (2011)" : 1
     "United Nations Support Mission in Libya" : 1
     "ONU-Habitat" : 1
     "BSCI" : 1
-    "United Nations Interim Security Force for Abyei- created under GA resolution 1990 (2011)" : 1
 ```
 
 ```mermaid
