@@ -6,21 +6,23 @@
 
 Les postes en informatique, data, développement, GIS et statistiques publiés en Afrique par l'ONU, l'UNESCO, l'Union africaine et la Banque africaine de développement. La page est mise à jour chaque matin.
 
-**8 offres ouvertes · 2 pays · 1 nouvelle aujourd'hui** · mise à jour le 24 novembre 2026
+**10 offres ouvertes · 3 pays · 2 nouvelles aujourd'hui** · mise à jour le 25 novembre 2026
 
 > Source indisponible aujourd'hui : Banque africaine de développement. Les offres déjà connues restent affichées jusqu'à leur clôture.
 
-Pays : [Kenya (7)](#kenya) · [Libye (1)](#libye)
+Pays : [Kenya (8)](#kenya) · [Abyei (1)](#abyei) · [Libye (1)](#libye)
 
 ## Ferment dans les 7 prochains jours
 
 | Poste | Organisation | Lieu | Clôture |
 |---|---|---|---|
-| [Intern - Data analytics](https://careers.un.org/jobSearchDescription/287931?language=en) | ONU-Habitat | Nairobi, Kenya | **25 nov. 2026, demain** |
-| [INFORMATION SYSTEMS ASSISTANT](https://careers.un.org/jobSearchDescription/288895?language=en) | United Nations Support Mission in Libya | Tripoli (Libya), Libye | 28 nov. 2026, dans 4 jours |
-| [Information Systems  Intern](https://careers.un.org/jobSearchDescription/288738?language=en) | PNUE | Nairobi, Kenya | 28 nov. 2026, dans 4 jours |
-| [Senior Consultant: Scientific Assessment and Expert Group Coordination on the Environmental Sustainability of Artificial Intelligence](https://careers.un.org/jobSearchDescription/288720?language=en) | PNUE | Nairobi, Kenya | 30 nov. 2026, dans 6 jours |
-| [Software Application Developer](https://careers.un.org/jobSearchDescription/288576?language=en) | PNUE | Nairobi, Kenya | 30 nov. 2026, dans 6 jours |
+| [Intern - Data analytics](https://careers.un.org/jobSearchDescription/287931?language=en) | ONU-Habitat | Nairobi, Kenya | **25 nov. 2026, dernier jour** |
+| [INFORMATION SYSTEMS ASSISTANT](https://careers.un.org/jobSearchDescription/288895?language=en) | United Nations Support Mission in Libya | Tripoli (Libya), Libye | 28 nov. 2026, dans 3 jours |
+| [Information Systems  Intern](https://careers.un.org/jobSearchDescription/288738?language=en) | PNUE | Nairobi, Kenya | 28 nov. 2026, dans 3 jours |
+| [Senior Consultant: Scientific Assessment and Expert Group Coordination on the Environmental Sustainability of Artificial Intelligence](https://careers.un.org/jobSearchDescription/288720?language=en) | PNUE | Nairobi, Kenya | 30 nov. 2026, dans 5 jours |
+| [Software Application Developer](https://careers.un.org/jobSearchDescription/288576?language=en) | PNUE | Nairobi, Kenya | 30 nov. 2026, dans 5 jours |
+| [INFORMATION SYSTEMS ASSISTANT](https://careers.un.org/jobSearchDescription/289094?language=en) *(nouveau)* | United Nations Interim Security Force for Abyei- created under GA resolution 1990 (2011) | Abyei, Abyei | 1er déc. 2026, dans 6 jours |
+| [Digital Skills Programme Consultant](https://careers.un.org/jobSearchDescription/288744?language=en) | PNUE | Nairobi, Kenya | 2 déc. 2026, dans 7 jours |
 
 ## Toutes les offres
 
@@ -30,13 +32,24 @@ Pays : [Kenya (7)](#kenya) · [Libye (1)](#libye)
 
 | Poste | Organisation | Ville | Niveau | Clôture |
 |---|---|---|---|---|
-| [Intern - Data analytics](https://careers.un.org/jobSearchDescription/287931?language=en) | ONU-Habitat | Nairobi | Stage | **25 nov. 2026, demain** |
-| [Information Systems  Intern](https://careers.un.org/jobSearchDescription/288738?language=en) | PNUE | Nairobi | Stage | 28 nov. 2026, dans 4 jours |
-| [Senior Consultant: Scientific Assessment and Expert Group Coordination on the Environmental Sustainability of Artificial Intelligence](https://careers.un.org/jobSearchDescription/288720?language=en) | PNUE | Nairobi | Consultant | 30 nov. 2026, dans 6 jours |
-| [Software Application Developer](https://careers.un.org/jobSearchDescription/288576?language=en) | PNUE | Nairobi | Consultant | 30 nov. 2026, dans 6 jours |
-| [Digital Skills Programme Consultant](https://careers.un.org/jobSearchDescription/288744?language=en) | PNUE | Nairobi | Consultant | 2 déc. 2026, dans 8 jours |
-| [Digital Policy and AI Consultant](https://careers.un.org/jobSearchDescription/288799?language=en) *(nouveau)* | PNUE | Nairobi | Consultant | 3 déc. 2026, dans 9 jours |
-| [DIGITAL FORENSIC INVESTIGATOR](https://careers.un.org/jobSearchDescription/282126?language=en) | BSCI | Nairobi | Professionnel (P-4) | 12 déc. 2026, dans 18 jours |
+| [Intern - Data analytics](https://careers.un.org/jobSearchDescription/287931?language=en) | ONU-Habitat | Nairobi | Stage | **25 nov. 2026, dernier jour** |
+| [Information Systems  Intern](https://careers.un.org/jobSearchDescription/288738?language=en) | PNUE | Nairobi | Stage | 28 nov. 2026, dans 3 jours |
+| [Senior Consultant: Scientific Assessment and Expert Group Coordination on the Environmental Sustainability of Artificial Intelligence](https://careers.un.org/jobSearchDescription/288720?language=en) | PNUE | Nairobi | Consultant | 30 nov. 2026, dans 5 jours |
+| [Software Application Developer](https://careers.un.org/jobSearchDescription/288576?language=en) | PNUE | Nairobi | Consultant | 30 nov. 2026, dans 5 jours |
+| [Digital Skills Programme Consultant](https://careers.un.org/jobSearchDescription/288744?language=en) | PNUE | Nairobi | Consultant | 2 déc. 2026, dans 7 jours |
+| [Digital Policy and AI Consultant](https://careers.un.org/jobSearchDescription/288799?language=en) | PNUE | Nairobi | Consultant | 3 déc. 2026, dans 8 jours |
+| [Charging Infrastructure & Transport Data Consultant](https://careers.un.org/jobSearchDescription/289005?language=en) *(nouveau)* | PNUE | Nairobi | Consultant | 4 déc. 2026, dans 9 jours |
+| [DIGITAL FORENSIC INVESTIGATOR](https://careers.un.org/jobSearchDescription/282126?language=en) | BSCI | Nairobi | Professionnel (P-4) | 12 déc. 2026, dans 17 jours |
+
+[Retour en haut](#haut)
+
+<a name="abyei"></a>
+
+### Abyei
+
+| Poste | Organisation | Ville | Niveau | Clôture |
+|---|---|---|---|---|
+| [INFORMATION SYSTEMS ASSISTANT](https://careers.un.org/jobSearchDescription/289094?language=en) *(nouveau)* | United Nations Interim Security Force for Abyei- created under GA resolution 1990 (2011) | Abyei | Services généraux (G-5) | 1er déc. 2026, dans 6 jours |
 
 [Retour en haut](#haut)
 
@@ -46,7 +59,7 @@ Pays : [Kenya (7)](#kenya) · [Libye (1)](#libye)
 
 | Poste | Organisation | Ville | Niveau | Clôture |
 |---|---|---|---|---|
-| [INFORMATION SYSTEMS ASSISTANT](https://careers.un.org/jobSearchDescription/288895?language=en) | United Nations Support Mission in Libya | Tripoli (Libya) | Service mobile (FS-5) | 28 nov. 2026, dans 4 jours |
+| [INFORMATION SYSTEMS ASSISTANT](https://careers.un.org/jobSearchDescription/288895?language=en) | United Nations Support Mission in Libya | Tripoli (Libya) | Service mobile (FS-5) | 28 nov. 2026, dans 3 jours |
 
 [Retour en haut](#haut)
 
@@ -58,27 +71,28 @@ Pays : [Kenya (7)](#kenya) · [Libye (1)](#libye)
 ```mermaid
 xychart-beta
     title "Offres ouvertes par pays"
-    x-axis ["Kenya", "Libye"]
-    y-axis "Offres" 0 --> 8
-    bar [7, 1]
+    x-axis ["Kenya", "Abyei", "Libye"]
+    y-axis "Offres" 0 --> 9
+    bar [8, 1, 1]
 ```
 
 ```mermaid
 pie showData
     title "Offres ouvertes par organisation"
-    "PNUE" : 5
+    "PNUE" : 6
     "United Nations Support Mission in Libya" : 1
     "ONU-Habitat" : 1
     "BSCI" : 1
+    "United Nations Interim Security Force for Abyei- created under GA resolution 1990 (2011)" : 1
 ```
 
 ```mermaid
 xychart-beta
-    title "Évolution sur les 3 derniers jours"
-    x-axis ["22/11", "23/11", "24/11"]
-    y-axis "Offres" 0 --> 10
-    line [7, 9, 8]
-    bar [0, 2, 1]
+    title "Évolution sur les 4 derniers jours"
+    x-axis ["22/11", "23/11", "24/11", "25/11"]
+    y-axis "Offres" 0 --> 11
+    line [7, 9, 8, 10]
+    bar [0, 2, 1, 2]
 ```
 
 _Courbe : offres ouvertes. Barres : nouvelles offres du jour._
